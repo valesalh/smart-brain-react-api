@@ -38,7 +38,7 @@ app.post('/signin', (req, res) => {
 
     if(req.body.email === database.users[0].email &&
         req.body.password === database.users[0].password) {
-            res.json('success');
+            res.json(database.users[0]);
     } else {
         res.status(400).json('Error logging in');
     }
@@ -63,25 +63,31 @@ app.post('/register', (req, res) => {
 
 app.get('/profile/:id', (req, res) => {
     const { id } = req.params;
-    // let found = false;
+    let found = false;
     database.users.forEach(user => {
         if(user.id === id) {
-            // found = true;
+            found = true;
             return res.json(user);
         }
     });
-    res.status(400).json('User not found');
+    if(!found) {
+        res.status(400).json('User not found');
+    }
 });
 
-app.post('/image', (req, res) => {
+app.put('/image', (req, res) => {
     const { id } = req.body;
+    let found = false;
     database.users.forEach(user => {
         if(user.id === id) {
+            found = true;
             user.entries++;
             return res.json(user.entries);
         }
     });
-    res.status(400).json('User not found');
+    if(!found) {
+        res.status(400).json('User not found');
+    }
 });
 
 app.listen(3000, () => {
