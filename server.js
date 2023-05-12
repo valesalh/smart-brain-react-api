@@ -24,9 +24,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-app.get('/', (req, res) => {
-    res.send("This endpoint currently serves no purpose.");
-});
+app.get('/', (req, res) => res.send("This endpoint currently serves no purpose."));
 
 app.post('/signin', (req, res) => signin.handleSignin(req, res, pgdb, bcrypt));
 
@@ -36,6 +34,7 @@ app.post('/register', (req, res) => register.handleRegister(req, res, pgdb, bcry
 app.get('/profile/:id', (req, res) => profile.handleProfileId((req, res, pgdb)));
 
 app.put('/image', (req, res) => image.handleImage(req, res, pgdb));
+app.post('/imageurl', (req, res) => image.handleAPICall(req, res));
 
 // Console logging for myself.
 app.listen(3000, () => {

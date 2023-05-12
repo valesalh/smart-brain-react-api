@@ -1,11 +1,16 @@
 /*
 Register endpoint. Registering must insert values in the users table AND the login table.
 Therefore, an atomic db transaction must be used. Note that registering does NOT 
-clean strings or verify formatting of inputs.
+validate or clean strings or verify formatting of inputs.
 */
 
 const handleRegister = (req, res, pgdb, bcrypt) => {
     const { name, email, password } = req.body;
+
+    if(!email || !name || !password) {
+        return res.status(400).json("Incorrect form submission");
+    }
+
     const hash = bcrypt.hashSync(password);
 
     pgdb.transaction(trx => {
